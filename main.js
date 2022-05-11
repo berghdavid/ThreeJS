@@ -21,7 +21,7 @@ scene.add(torus);
 
 // Light sources
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(5, 5, 20);
+pointLight.position.set(5, 10, 25);
 scene.add(pointLight);
 
 //const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -73,6 +73,20 @@ moon.position.z = 15;
 moon.position.setX(-10);
 scene.add(moon);
 
+const moonTexture2 = new THREE.TextureLoader().load('zuku.jpg');
+moonTexture2.rotation = 0.6;
+const moon2 = new THREE.Mesh(
+  new THREE.SphereGeometry(3, 32, 32),
+  new THREE.MeshStandardMaterial({
+    map: moonTexture2,
+    //normalMap: normalTexture,
+  })
+);
+moon2.position.z = 18;
+moon2.position.x = 10;
+scene.add(moon2);
+
+// Camera scrolling
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
   moon.rotation.x += 0.02;
