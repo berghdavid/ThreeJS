@@ -4,12 +4,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './style.css'
 
 const scene = new THREE.Scene();
-
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
 });
+const controls = new OrbitControls(camera, renderer.domElement);
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -20,22 +19,22 @@ const material = new THREE.MeshStandardMaterial({color: 0xFF6347 });
 const torus = new THREE.Mesh(geometry, material);
 scene.add(torus);
 
-
+// Light sources
 const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(10, 10, 10);
+pointLight.position.set(5, 5, 20);
 scene.add(pointLight);
 
-const ambientLight = new THREE.AmbientLight(0xffffff);
+//const ambientLight = new THREE.AmbientLight(0xffffff);
 //scene.add(ambientLight);
 
 const lightHelper = new THREE.PointLightHelper(pointLight);
 scene.add(lightHelper);
 
 const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(gridHelper);
+//scene.add(gridHelper);
 
-const controls = new OrbitControls(camera, renderer.domElement);
 
+// Generated stars
 function addStar() {
   const geometry = new THREE.SphereGeometry(0.25, 24, 24);
   const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
@@ -73,6 +72,23 @@ const moon = new THREE.Mesh(
 moon.position.z = 15;
 moon.position.setX(-10);
 scene.add(moon);
+
+function moveCamera() {
+  const t = document.body.getBoundingClientRect().top;
+  moon.rotation.x += 0.02;
+  moon.rotation.y += 0.01;
+  moon.rotation.z += 0.03;
+
+  me.rotation.y += 0.01;
+  me.rotation.z += 0.01;
+
+  camera.position.z = 5 - t * 0.01;
+  camera.position.x = t * -0.0002;
+  camera.rotation.y = t * -0.0002;
+}
+
+document.body.onscroll = moveCamera;
+moveCamera();
 
 
 function animate() {
