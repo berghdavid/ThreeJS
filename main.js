@@ -109,7 +109,7 @@ moveCamera();
 
 let startRot = moon2.rotation.y;
 let max = 0.5;
-let adder = 0.03;
+let adder = 0.01;
 function animate() {
   requestAnimationFrame(animate);
 
