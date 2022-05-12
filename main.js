@@ -106,6 +106,20 @@ oba.position.z = -15;
 oba.position.x = 0;
 scene.add(oba);
 
+// Zuku 2
+const zukuTexture = new THREE.TextureLoader().load('zuku3.jpg');
+zukuTexture.offset.y = 0;
+zukuTexture.offset.x = 0.26;
+const zuku3 = new THREE.Mesh(
+  new THREE.SphereGeometry(8, 32, 32),
+  new THREE.MeshStandardMaterial({
+    map: zukuTexture,
+  })
+);
+zuku3.position.z = -15;
+zuku3.position.x = 0;
+scene.add(zuku3);
+
 
 // Camera scrolling
 function moveCamera() {
@@ -136,8 +150,8 @@ moveCamera();
 let startRot = moon2.rotation.y;
 let max = 0.5;
 let adder = 0.01;
-let obamaI = 0;
-let obamaCenter = [oba.position.x, oba.position.y]
+let rotationI = 0;
+let rotationCenter = [oba.position.x, oba.position.y]
 function animate() {
   requestAnimationFrame(animate);
 
@@ -150,10 +164,15 @@ function animate() {
     adder = -adder;
   }
 
-  obamaI += 0.008;
-  oba.position.x = obamaCenter[0] + 20*Math.cos(obamaI);
-  oba.position.y = obamaCenter[1] + 20*Math.sin(obamaI);
+  rotationI += 0.008;
+
+  oba.position.x = rotationCenter[0] + 20*Math.cos(rotationI);
+  oba.position.y = rotationCenter[1] + 20*Math.sin(rotationI);
   oba.lookAt(camera.position.x, camera.position.y, camera.position.z)
+  zuku3.position.x = rotationCenter[0] - 20*Math.cos(rotationI);
+  zuku3.position.y = rotationCenter[1] - 20*Math.sin(rotationI);
+  zuku3.lookAt(camera.position.x, camera.position.y, camera.position.z)
+
 
   controls.update();
 
