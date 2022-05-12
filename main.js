@@ -14,7 +14,8 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
 
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+// Donut
+const geometry = new THREE.TorusGeometry(10, 1, 16, 100);
 const material = new THREE.MeshStandardMaterial({color: 0xFF6347 });
 const torus = new THREE.Mesh(geometry, material);
 scene.add(torus);
@@ -28,7 +29,7 @@ scene.add(pointLight);
 //scene.add(ambientLight);
 
 const lightHelper = new THREE.PointLightHelper(pointLight);
-scene.add(lightHelper);
+//scene.add(lightHelper);
 
 const gridHelper = new THREE.GridHelper(200, 50);
 //scene.add(gridHelper);
@@ -73,6 +74,7 @@ moon.position.z = 15;
 moon.position.setX(-10);
 scene.add(moon);
 
+// Moon 2
 const moonTexture2 = new THREE.TextureLoader().load('zuku.jpg');
 moonTexture2.rotation = 0.6;
 moonTexture2.offset.y = 0.25; // 0.0 - 1.0
@@ -89,11 +91,27 @@ moon2.position.x = 10;
 moon2.rotation.y = -1.8;
 scene.add(moon2);
 
+// Obama
+const obamaTexture = new THREE.TextureLoader().load('obama.jpg');
+obamaTexture.offset.y = 0.1;
+obamaTexture.offset.x = 0.35;
+const oba = new THREE.Mesh(
+  new THREE.SphereGeometry(8, 32, 32),
+  new THREE.MeshStandardMaterial({
+    map: obamaTexture,
+    //normalMap: normalTexture,
+  })
+);
+oba.position.z = -15;
+oba.position.x = 0;
+scene.add(oba);
+
+
 // Camera scrolling
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
   moon.rotation.x += 0.02;
-  moon.rotation.y += 0.01;
+  moon.rotation.y += 0.005;
   moon.rotation.z += 0.03;
 
   me.rotation.y += 0.01;
@@ -101,7 +119,15 @@ function moveCamera() {
 
   camera.position.z = 5 - t * 0.01;
   camera.position.x = t * -0.0002;
-  camera.rotation.y = t * -0.0002;
+  camera.position.y = t * -0.0002;
+  if(camera.position.z > 24) {
+    let diff = camera.position.z - 24
+    let modifier = diff*0.01 + Math.min(diff, 10)*diff*0.1;
+    camera.position.x -= modifier;
+    camera.position.y += modifier;
+  }
+
+  console.log("Z: " + camera.position.z)
 }
 
 document.body.onscroll = moveCamera;
@@ -110,6 +136,8 @@ moveCamera();
 let startRot = moon2.rotation.y;
 let max = 0.5;
 let adder = 0.01;
+let obamaI = 0;
+let obamaCenter = [oba.position.x, oba.position.y]
 function animate() {
   requestAnimationFrame(animate);
 
@@ -122,6 +150,10 @@ function animate() {
     adder = -adder;
   }
 
+  obamaI += 0.008;
+  oba.position.x = obamaCenter[0] + 20*Math.cos(obamaI);
+  oba.position.y = obamaCenter[1] + 20*Math.sin(obamaI);
+  oba.lookAt(camera.position.x, camera.position.y, camera.position.z)
 
   controls.update();
 
