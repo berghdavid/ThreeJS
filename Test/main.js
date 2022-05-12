@@ -140,8 +140,6 @@ function moveCamera() {
     camera.position.x -= modifier;
     camera.position.y += modifier;
   }
-
-  console.log("Z: " + camera.position.z)
 }
 
 document.body.onscroll = moveCamera;
