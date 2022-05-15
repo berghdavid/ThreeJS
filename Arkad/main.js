@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
+import { Timer } from './timer'
 
 import './style.css'
 
@@ -80,6 +83,34 @@ const earth = new THREE.Mesh(
 );
 earth.position.set(0, 13, -80)
 scene.add(earth);
+
+// Countdown
+let timer = new Timer();
+const fontLoader = new FontLoader();
+fontLoader.load('node_modules/three/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+	const geometry = new TextGeometry(timer.timeLeft(), {
+		font: font,
+		size: 5,
+		height: 1,
+		curveSegments: 8,
+		bevelEnabled: true,
+		bevelThickness: 0.6,
+		bevelSize: 0.6,
+		bevelOffset: 0,
+		bevelSegments: 4
+	});
+
+  const textMesh = new THREE.Mesh(
+    geometry,
+    new THREE.MeshStandardMaterial({
+      color: 0xFFFFFF
+    })
+  );
+  textMesh.position.set(-13, -8, -32)
+
+  scene.add(textMesh);
+});
+
 
 // Camera scrolling
 const flyZ = 32;
